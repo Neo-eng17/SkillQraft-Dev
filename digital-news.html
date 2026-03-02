@@ -1,0 +1,1313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillQraft Journal • Brutal Self-Education in a Noisy Digital World</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sqPrimary: '#f59e0b',
+        sqPrimaryDark: '#d97706',
+        sqBg: '#1c1917',
+        sqCard: '#292524',
+        sqHighlight: '#78350f'
+      },
+      fontFamily: {
+        serif: ['Georgia', 'ui-serif', 'serif']
+      }
+    }
+  }
+}
+</script>
+
+<style>
+@keyframes slowFloat {0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+@keyframes fadeIn {from{opacity:0;}to{opacity:1;}}
+@keyframes slideUp {from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse-glow {0%,100%{box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);}50%{box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);}}
+.animate-float {animation:slowFloat 7s ease-in-out infinite;}
+.animate-fadeIn {animation:fadeIn 0.5s ease forwards;}
+.animate-slideUp {animation:slideUp 0.6s ease forwards;}
+.animate-pulse-glow {animation:pulse-glow 3s ease-in-out infinite;}
+.card-hover {transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
+.card-hover:hover {transform: translateY(-4px);}
+.article-card {transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
+.article-card.active {border-color: #f59e0b; background-color: #292524; box-shadow: 0 0 30px rgba(245, 158, 11, 0.1);}
+.article-card:not(.active) {opacity: 0.75;}
+.article-card:not(.active):hover {opacity: 1; transform: translateY(-2px);}
+.content-fade {transition: opacity 0.4s ease, transform 0.4s ease;}
+.content-hidden {opacity: 0; transform: translateX(10px); pointer-events: none;}
+</style>
+</head>
+
+<body class="bg-sqBg text-amber-50 min-h-screen flex flex-col relative overflow-x-hidden">
+
+<!-- 🔐 SESSION PROTECTION -->
+<script>
+if (!localStorage.getItem('skillqraft_auth_token')) {
+  window.location.replace('index.html');
+}
+</script>
+
+<!-- Floating Background Elements -->
+<div class="absolute -top-40 -left-40 w-96 h-96 bg-sqPrimary/20 rounded-full blur-3xl animate-float -z-10"></div>
+<div class="absolute top-1/3 right-10 w-80 h-80 bg-orange-300/15 rounded-full blur-3xl animate-float -z-10"></div>
+<div class="absolute bottom-0 left-1/3 w-64 h-64 bg-amber-700/10 rounded-full blur-3xl animate-float -z-10" style="animation-delay: 2s;"></div>
+
+<!-- NAVBAR -->
+<nav class="w-full border-b border-stone-800 bg-sqBg/90 backdrop-blur sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="home.html" class="flex items-center gap-2 group">
+      <div class="h-8 w-8 rounded-lg bg-sqPrimary flex items-center justify-center font-bold text-sqBg text-xl transition-transform group-hover:scale-105">SQ</div>
+      <span class="font-semibold tracking-tighter text-xl">SkillQraft</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center gap-7 text-sm font-medium">
+      <a href="home.html" class="hover:text-sqPrimary transition">Home</a>
+      <a href="resources.html" class="hover:text-sqPrimary transition">Resources</a>
+      <a href="services.html" class="hover:text-sqPrimary transition">Our Services</a>
+      <a href="digital-news.html" class="text-sqPrimary font-semibold">Digital News</a>
+      <a href="contact.html" class="hover:text-sqPrimary transition">Talk to Us</a>
+    </div>
+
+    <!-- User Area -->
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-xs text-amber-300 tracking-wide">Welcome back</div>
+          <div id="userGreeting" class="font-semibold text-amber-50"></div>
+        </div>
+      </div>
+      <button onclick="logout()" 
+        class="px-6 py-2.5 text-sm font-semibold rounded-2xl border border-red-400/30 hover:bg-red-950/50 hover:border-red-400 text-red-300 transition">
+        Sign out
+      </button>
+      <button onclick="toggleMobileMenu()" class="md:hidden">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="md:hidden hidden border-t border-stone-800 bg-sqBg/95 py-4">
+    <div class="px-6 flex flex-col gap-4 text-sm">
+      <a href="home.html" class="py-2">Home</a>
+      <a href="resources.html" class="py-2">Resources</a>
+      <a href="services.html" class="py-2">Our Services</a>
+      <a href="digital-news.html" class="py-2 text-sqPrimary font-semibold">Digital News</a>
+      <a href="contact.html" class="py-2">Talk to Us</a>
+      <div class="pt-4 border-t border-stone-700">
+        <button onclick="logout()" class="w-full py-3 rounded-2xl border border-red-400/30 text-red-300 font-semibold">Sign out</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="pt-16 pb-8 px-4 max-w-7xl mx-auto">
+  <div class="text-center mb-10">
+  <div class="inline-flex items-center gap-2 bg-sqCard/80 border border-sqPrimary/30 px-5 py-1.5 rounded-3xl text-xs tracking-widest text-sqPrimary mb-6 animate-fadeIn">
+    <span class="w-2 h-2 bg-sqPrimary rounded-full animate-pulse"></span>
+    SKILLQRAFT JOURNAL • DIGITAL INTELLIGENCE CURRICULUM
+  </div>
+  
+  <h1 class="text-4xl md:text-5xl font-semibold leading-tight tracking-tighter animate-slideUp">
+  Step Into the Digital World with Confidence, <span id="heroName" class="text-sqPrimary"></span>
+</h1>
+  
+  <p class="mt-6 text-lg text-amber-200 max-w-2xl mx-auto leading-relaxed">
+    Actionable insights and strategies to sharpen your focus, skills, and understanding in a fast-moving digital world.
+  </p>
+</div>
+<div class="flex items-center justify-between mb-4">
+  <p class="uppercase text-xs tracking-widest text-amber-300 pl-1">Choose Your Path</p>
+
+  <!-- Category Dropdown -->
+  <select id="categoryFilter" class="bg-sqCard border border-stone-700 text-amber-200 text-xs rounded-xl px-3 py-1 cursor-pointer">
+    <option value="all">All Categories</option>
+    <option value="Digital Literacy">Digital Literacy</option>
+    <option value="AI Literacy">AI Literacy</option>
+    <option value="Productivity">Productivity</option>
+    <option value="Critical Thinking">Critical Thinking</option>
+    <option value="Privacy">Privacy</option>
+    <option value="Creation">Creation</option>
+    <option value="Career">Career</option>
+  </select>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-amber-300 mb-6 animate-fadeIn" style="animation-delay: 0.2s;">
+  <span class="px-4 py-2 bg-sqCard rounded-full border border-stone-700 hover:border-sqPrimary/50 transition cursor-pointer" title="Constant Learning">
+    Constant Learning
+  </span>
+  <span class="px-4 py-2 bg-sqCard rounded-full border border-stone-700 hover:border-sqPrimary/50 transition cursor-pointer" title="Constant Execution">
+    Constant Execution
+  </span>
+  <span class="px-4 py-2 bg-sqCard rounded-full border border-stone-700 hover:border-sqPrimary/50 transition cursor-pointer" title="Constant Improvement">
+    Constant Improvement
+  </span>
+</div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="flex-1 max-w-7xl mx-auto px-4 pb-24">
+  <div class="grid lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT COLUMN: ARTICLE SELECTOR -->
+    <div class="lg:col-span-4 space-y-4">
+      <div class="flex items-center justify-between mb-4">
+        <p class="uppercase text-xs tracking-widest text-amber-300 pl-1">Choose Your Path</p>
+        <span id="articleCount" class="text-xs text-stone-500"></span>
+      </div>
+      <div id="articleList" class="space-y-3">
+        <!-- Articles rendered here by JavaScript -->
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: ACTIVE ARTICLE DISPLAY -->
+    <div class="lg:col-span-8">
+      <div id="activeArticleContainer" class="content-fade content-hidden">
+        <!-- Active article rendered here by JavaScript -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-stone-800 bg-sqCard/30 py-16 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 text-center text-xs text-amber-300">
+    <p class="mb-2">© 2026 SkillQraft • Forging your Future</p>
+    <p>A quiet corner of the internet where learning actually sticks.</p>
+  </div>
+</footer>
+
+<script>
+// ==================== ARTICLE DATA ====================
+// TO ADD NEW ARTICLES: Simply add a new object to this array following the same format.
+// The most recently written article (highest date) will appear by default.
+
+const articles = [
+  {
+    id: 1,
+    title: "The Attention Economy: How Big Tech Monetizes Your Focus",
+    date: "2026-03-15",
+    readTime: "7 min read",
+    category: "Digital Literacy",
+    excerpt: "Discover how platforms like TikTok, Instagram, and YouTube design algorithms to maximize watch time through dopamine loops and infinite scroll mechanics.",
+    image: "https://images.pexels.com/photos/4145195/pexels-photo-4145195.jpeg?auto=compress&cs=tinysrgb&w=800",
+    content: `
+      <p class="text-lg text-amber-200">There is a soft war being fought every single day for something you possess but cannot see: your attention. And you are losing it.</p>
+      
+      <p class="text-lg text-amber-200">The platforms you use for entertainment, connection, and information are not neutral tools. They are sophisticated attention-harvesting machines designed by teams of engineers and behavioral psychologists with one primary objective: keep you scrolling.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">The Dopamine Loop</h2>
+      
+      <p class="text-lg text-amber-200">Every time you refresh your feed, you're pulling a lever on a psychological slot machine. The variable reward system—sometimes you see something amazing, sometimes you don't—creates a dopamine loop more powerful than any fixed schedule could achieve.</p>
+      
+      <p class="text-lg text-amber-200">TikTok's algorithm doesn't just show you videos; it shows you <em>exactly</em> the type of video that will make you watch "just one more." The infinite scroll removes natural stopping points. There is no end of the feed, no logical place to close the app. The friction has been removed entirely.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why Outrage Spreads Faster Than Nuance</h2>
+      
+      <p class="text-lg text-amber-200">Algorithms are indifferent to truth, but they are acutely sensitive to engagement. And nothing drives engagement quite like emotional intensity—particularly negative emotions.</p>
+      
+      <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">The engagement hierarchy:</p>
+        <ol class="list-decimal list-inside space-y-3 text-amber-200">
+          <li><strong>Outrage</strong> → Maximum shares, comments, emotional response</li>
+          <li><strong>Curiosity</strong> → High click-through, moderate sharing</li>
+          <li><strong>Validation</strong> → Moderate engagement, comfortable consumption</li>
+          <li><strong>Nuanced analysis</strong> → Low engagement, requires thinking</li>
+        </ol>
+      </div>
+
+      <p class="text-lg text-amber-200 mt-8">This is not an accident. It is the logical consequence of advertising-based business models where time-on-platform directly translates to revenue.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Reclaiming Your Agency</h2>
+      
+      <p class="text-lg text-amber-200">Understanding the architecture of manipulation is the first step toward escaping it. Once you recognize the patterns—variable rewards, infinite scroll, outrage amplification—you cannot unsee them.</p>
+      
+      <p class="text-lg text-amber-200">Digital literacy becomes psychological self-defense. You begin to make conscious choices about when to engage, how long to stay, and what content deserves your cognitive resources.</p>
+
+      <div class="mt-12 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">Action steps:</p>
+        <ol class="list-decimal list-inside space-y-3 text-amber-200">
+          <li>Install app timers or use built-in screen time controls</li>
+          <li>Turn off all non-human notifications (remove the red badges)</li>
+          <li>Delete apps from your phone, access them only on desktop</li>
+          <li>Create friction before opening social apps (wait 10 seconds, ask why)</li>
+        </ol>
+      </div>
+    `
+  },
+  {
+    id: 2,
+    title: "AI Is Not Magic: What Artificial Intelligence Actually Is (and Isn't)",
+    date: "2026-03-10",
+    formattedDate: "Mar 10, 2026",
+    readTime: "8 min read",
+    category: "AI Literacy",
+    excerpt: "Demystify AI using real examples from OpenAI and Google. Understand pattern recognition versus real thinking, and why AI makes confident mistakes.",
+    image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+    content: `
+      <p class="text-lg text-amber-200">The fear surrounding artificial intelligence stems from a fundamental misunderstanding of what it actually is. Hollywood has sold us visions of sentient machines, while the reality is both more mundane and more consequential.</p>
+      
+      <p class="text-lg text-amber-200">AI is not magic. It is not thinking. It is not conscious. What it is, is extraordinarily powerful pattern recognition at scale—and understanding this distinction changes everything about how you interact with these tools.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Machine Learning in Simple Terms</h2>
+      
+      <p class="text-lg text-amber-200">At its core, machine learning is about finding patterns in data. Show a system enough pictures of cats, and it learns what features correlate with "cat." Show it enough examples of good writing, and it learns the patterns that make writing work.</p>
+      
+      <p class="text-lg text-amber-200">This is fundamentally different from human learning. A child learns what a cat is from seeing two or three. AI needs millions. But once learned, the AI can apply that pattern recognition at speeds and scales impossible for humans.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Pattern Recognition vs. Real Thinking</h2>
+      
+      <p class="text-lg text-amber-200">When ChatGPT generates a response, it is not "thinking" in any meaningful sense. It is predicting what word should come next based on patterns learned from billions of texts. It has no understanding, no intention, no consciousness.</p>
+      
+      <p class="text-lg text-amber-200">This is not a limitation to dismiss—it's a fundamental characteristic that shapes what AI can and cannot do. AI can identify patterns humans miss. But it cannot truly reason, understand context, or care about outcomes.</p>
+
+      <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">What AI can do:</p>
+        <ul class="list-disc list-inside space-y-2 text-amber-200">
+          <li>Recognize patterns in vast datasets</li>
+          <li>Generate coherent text, images, or code</li>
+          <li>Translate between languages with high accuracy</li>
+          <li>Summarize and categorize information</li>
+        </ul>
+      </div>
+
+      <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">What AI cannot do:</p>
+        <ul class="list-disc list-inside space-y-2 text-amber-200">
+          <li>Understand meaning or context truly</li>
+          <li>Reason about novel situations reliably</li>
+          <li>Distinguish truth from falsehood</li>
+          <li>Care about outcomes or have intentions</li>
+        </ul>
+      </div>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Bias in Training Data</h2>
+      
+      <p class="text-lg text-amber-200">AI systems learn from data created by humans—and humans are biased. The patterns AI learns reflect the biases in its training data, from racial and gender biases to ideological slants.</p>
+      
+      <p class="text-lg text-amber-200">This is not something that can be "fixed" easily. The biases are woven into the fabric of human language and culture that the AI learns from. The solution is awareness: understanding that AI output is not objective truth but pattern reflection.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why AI Makes Confident Mistakes</h2>
+      
+      <p class="text-lg text-amber-200">Perhaps the most dangerous thing about AI is that it makes mistakes with absolute confidence. It does not say "I don't know" or express uncertainty. When it is wrong, it is wrong with the same certainty as when it is right.</p>
+      
+      <p class="text-lg text-amber-200">This is why human oversight is not optional—it's essential. AI is a tool that amplifies human capability, but only when humans remain in the loop to catch errors, provide context, and make final decisions.</p>
+
+      <div class="mt-12 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">Strategic thinking about AI:</p>
+        <ol class="list-decimal list-inside space-y-3 text-amber-200">
+          <li>Use AI to augment your capabilities, not replace your judgment</li>
+          <li>Always verify AI outputs, especially for important decisions</li>
+          <li>Understand the limitations before you trust the output</li>
+          <li>Learn to prompt effectively—this is becoming a core skill</li>
+        </ol>
+      </div>
+    `
+  },
+  {
+  id: 3,
+  title: "Digital Minimalism: How to Use Technology Without Being Used",
+  date: "2026-03-05",
+  formattedDate: "Mar 5, 2026",
+  readTime: "7 min read",
+  category: "Productivity",
+  excerpt: "Inspired by Cal Newport. Learn how to reclaim deep focus, kill notification addiction, and build intentional digital habits that serve your real goals — not platform profits.",
+  image: "https://images.pexels.com/photos/4492127/pexels-photo-4492127.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">Technology is neutral. It becomes powerful or destructive depending on how you use it. Most people let apps, notifications and algorithms decide their attention. Digital minimalism flips that: you decide what technology enters your life and when — and everything else gets cut.</p>
+    
+    <p class="text-lg text-amber-200">This is not about hating phones or deleting social media. It is about ruthless intentionality: keep only the tools that align with your values and goals, and remove the rest. In 2026, when average daily screen time still hovers around 7 hours, this choice is more valuable than ever.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Deep Work vs Shallow Scrolling — Why It Matters</h2>
+    
+    <p class="text-lg text-amber-200">Deep work is focused, distraction-free effort on cognitively demanding tasks — writing, coding, studying, strategic thinking. It produces real value and satisfaction. Shallow work (or shallow scrolling) is everything else: quick replies, feeds, notifications, context-switching.</p>
+    
+    <p class="text-lg text-amber-200">Research shows that each interruption costs 23 minutes of recovery time to regain full focus (University of California, Irvine). Most people never reach deep work because their day is filled with shallow pings. The result: fragmented attention, lower output, and a nagging sense that you are not living up to your potential.</p>
+    
+    <p class="text-lg text-amber-200">Digital minimalism protects deep work by removing the shallow distractions that dominate most digital lives.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">The Notification Detox — Reclaim Your Brain</h2>
+    
+    <p class="text-lg text-amber-200">Every notification — even one you ignore — creates “attention residue”: your brain keeps part of its focus on the alert while you try to work. Over a day this adds up to massive cognitive tax.</p>
+    
+    <p class="text-lg text-amber-200">The fix is simple but powerful: turn off almost everything.</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Notification rules that actually work:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Disable all app badges, sounds, banners and lock-screen previews except for real human communication (calls, messages from contacts)</li>
+        <li>Allow notifications only from people who would call you in an emergency</li>
+        <li>Check email and messaging 3–4 fixed times per day — never on demand</li>
+        <li>Use Do Not Disturb or Focus modes during work blocks, sleep, and family time</li>
+        <li>Turn off “suggested posts” and “recommended for you” alerts in every app</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-6">After one week most people report feeling calmer, less anxious and surprisingly more connected — because they are present when they do interact.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why Most People Fail at Digital Minimalism (and How to Avoid It)</h2>
+    
+    <p class="text-lg text-amber-200">They try to change everything at once and burn out. Or they remove tools without replacing the void, so boredom pulls them back. Or they keep “just in case” apps that quietly steal attention.</p>
+    
+    <p class="text-lg text-amber-200">The winning approach: start small, replace habits, and audit regularly. Intentionality beats perfection.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Building Intentional Digital Habits That Last</h2>
+    
+    <p class="text-lg text-amber-200">Default behavior is reactive: phone in hand → open app → scroll. Intentional behavior is proactive: decide in advance what tool serves which goal, then use only that.</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Core habits to build:</p>
+      <ul class="list-disc list-inside space-y-3 text-amber-200">
+        <li>Do a monthly app audit — delete anything not clearly useful in the last 30 days</li>
+        <li>Keep your phone in another room during focused work blocks</li>
+        <li>Use website blockers (Freedom, Cold Turkey, LeechBlock) for high-distraction sites during set hours</li>
+        <li>Schedule technology use — e.g., social media only 7–8 pm, news only mornings</li>
+        <li>Create sacred phone-free zones: bedroom, dinner table, first 60 minutes after waking</li>
+        <li>Replace mindless scrolling with one intentional activity: walk, read, journal, call someone</li>
+      </ul>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Protecting Your Cognitive Bandwidth</h2>
+    
+    <p class="text-lg text-amber-200">Your attention is your most valuable resource — and it is finite. Every shallow interaction consumes bandwidth that could go to deep thought, creativity, relationships or rest.</p>
+    
+    <p class="text-lg text-amber-200">Digital minimalism is about saying no to 95% of digital noise so you can say yes to the 5% that actually matters. The less you let in, the more mental clarity and energy you have for what counts.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Your 30-Day Digital Minimalism Starter Plan</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Follow this realistic roadmap:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li><strong>Week 1</strong> — Notification detox: turn off all non-human alerts. Keep phone out of bedroom.</li>
+        <li><strong>Week 2</strong> — App audit: delete 5–10 unused or low-value apps. Set screen-time limits on top time-wasters.</li>
+        <li><strong>Week 3</strong> — Create two phone-free zones/times daily (e.g., meals + 8–9 pm). Replace one scrolling session with a walk or reading.</li>
+        <li><strong>Week 4</strong> — Schedule intentional tech use. At month end rate your focus, mood and deep work time on 1–10. Celebrate any improvement.</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-8">Signs you are winning: you finish tasks faster, feel less scattered, sleep better, enjoy conversations more, and notice you have more mental space for what truly matters.</p>
+    
+    <p class="text-lg text-amber-200 mt-6 font-semibold">Technology should serve your life — not run it. Start tonight: turn off notifications for one app and leave your phone in another room for the next hour. That single choice is the beginning of freedom. You deserve a life where your attention belongs to you.</p>
+  `
+},
+ {
+  id: 4,
+  title: "The Rise of Misinformation: Why Smart People Believe False Things Online",
+  date: "2026-02-28",
+  formattedDate: "Feb 28, 2026",
+  readTime: "9 min read",
+  category: "Critical Thinking",
+  excerpt: "Smart people fall for misinformation every day — not because they lack intelligence, but because online systems exploit powerful cognitive biases. Learn exactly how filter bubbles, confirmation bias and emotional triggers work, plus a reliable step-by-step system to fact-check anything before you believe or share it.",
+  image: "https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">Intelligent, well-educated people share and believe completely false claims online all the time. The reason is not stupidity — it is design. The modern internet is built to exploit the same mental shortcuts that normally make us smart and efficient. In 2026, with faster AI-generated content and more sophisticated recommendation algorithms, misinformation spreads quicker and looks more convincing than ever.</p>
+    
+    <p class="text-lg text-amber-200">This article is not about judging others or becoming cynical. It is about building mental immunity: simple, repeatable habits that let you move through a noisy, manipulated information landscape without getting misled. The goal is clearer thinking, not perfect certainty.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Confirmation Bias — The Engine of False Belief</h2>
+    
+    <p class="text-lg text-amber-200">We naturally seek, interpret and remember information that confirms what we already believe. This is confirmation bias, and it is one of the strongest and most universal human tendencies. When a claim aligns with our worldview, we accept it quickly and with little scrutiny. When it contradicts our beliefs, we demand unusually high standards of proof.</p>
+    
+    <p class="text-lg text-amber-200">Smart people are especially vulnerable because they are skilled at building arguments. The same reasoning ability that helps solve problems also lets them construct elaborate justifications for believing what feels emotionally comfortable. Online this becomes dangerous: one viral post that “feels true” can be rationalized into certainty within seconds.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Echo Chambers and Algorithmic Polarization</h2>
+    
+    <p class="text-lg text-amber-200">Social platforms and search engines do not show you the full internet. They show a personalized version optimized for engagement. Because we engage more with content that matches our existing views, the algorithm learns this preference and feeds us more of the same — while quietly reducing exposure to challenging or neutral perspectives.</p>
+    
+    <p class="text-lg text-amber-200">Over time this creates echo chambers: environments where one viewpoint dominates so completely that alternatives seem fringe, absurd or malicious. The Cambridge Analytica case (2016–2018) showed how this could be weaponized at scale. Using personality data from millions of Facebook profiles, targeted ads exploited psychological vulnerabilities to amplify division and influence behavior — not by convincing people of specific lies, but by flooding them with emotionally charged content that deepened existing biases.</p>
+    
+    <p class="text-lg text-amber-200 mt-6">In 2026 the effect is stronger: AI-driven feeds are faster, more accurate at predicting reactions, and better at keeping users inside comfortable bubbles.</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">How misinformation spreads faster than truth:</p>
+      <ul class="list-disc list-inside space-y-2 text-amber-200">
+        <li>It exploits pre-existing fears, hopes and identities</li>
+        <li>Emotional content (anger, outrage, moral superiority) travels 6× faster than neutral facts</li>
+        <li>It often appears to come from trusted people or sources in your network</li>
+        <li>Believing it strengthens group belonging — sharing becomes a loyalty signal</li>
+      </ul>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">The SIFT Method — A Reliable Way to Fact-Check Anything</h2>
+    
+    <p class="text-lg text-amber-200">Fact-checking is not about trusting “official” sources blindly. It is a quick, repeatable skill you can use on any claim in under 60 seconds. The most practical framework in 2026 is SIFT (developed by Mike Caulfield and widely taught in schools and newsrooms):</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">SIFT checklist — do these four steps in order:</p>
+      <ol class="list-decimal list-inside space-y-4 text-amber-200">
+        <li><strong>Stop</strong><br>Before you react, like, share or get angry — pause. Emotional arousal is the enemy of clear thinking. Ask: “Do I have time to verify this right now?” If not, do not spread it.</li>
+        <li><strong>Investigate the source</strong><br>Who originally posted this? What is their track record? Use a quick search: “site: + [source name] + reputation” or look them up on Wikipedia / Media Bias Chart. Many viral claims come from low-credibility accounts designed to provoke.</li>
+        <li><strong>Find better coverage</strong><br>Search the claim itself (exact phrase in quotes) on Google or a neutral aggregator like Ground News. Look for reports from multiple independent outlets — especially those that do not usually align with your views. If only partisan sites or social media are covering it, be skeptical.</li>
+        <li><strong>Trace claims to the original context</strong><br>Follow links backward until you reach the primary source (original study, video clip, document). Read the full context — headlines and snippets are frequently distorted. Ask: Does the original material actually support the viral claim?</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-6">SIFT takes 30–90 seconds once you practice it. It is far more effective than relying on “gut feeling” or checking whether a claim appears on one trusted site.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Daily Habits That Build Mental Immunity</h2>
+    
+    <p class="text-lg text-amber-200">Protection from misinformation is not a one-time skill — it is a lifestyle. These small routines make it almost automatic:</p>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li>Wait 10 minutes before sharing anything emotional or surprising — most viral fakes lose steam quickly</li>
+      <li>Follow at least two news sources that lean the opposite direction from your natural views — read one article from each weekly</li>
+      <li>Practice “steel-manning” — try to explain the strongest version of an opposing argument before dismissing it</li>
+      <li>Use browser extensions like NewsGuard, Media Bias/Fact Check or Just Facts Daily for quick credibility signals</li>
+      <li>Teach one person in your circle how to use SIFT — explaining it reinforces your own habit</li>
+    </ul>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Signs You Are Getting Better at This</h2>
+    
+    <ul class="list-disc list-inside space-y-2 text-amber-200">
+      <li>You catch yourself feeling strong emotions and immediately pause instead of reacting</li>
+      <li>You can explain why you believe something using primary evidence, not just “it feels right”</li>
+      <li>You regularly read or listen to thoughtful people who disagree with you without anger</li>
+      <li>You share far less — but when you do, you feel confident the information is solid</li>
+      <li>Misinformation headlines no longer surprise or upset you — they just look predictable</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-8">The internet will always have misinformation. You cannot stop it — but you can stop it from controlling your thinking. Every time you apply SIFT, question your first reaction, or seek the other side, you strengthen your mental defenses. In a world designed to exploit your biases, choosing clarity over comfort is one of the most powerful things you can do.</p>
+    
+    <p class="text-lg text-amber-200 mt-6 font-semibold">Start today. The next time you see a claim that makes you angry, excited or smug — stop. Run SIFT. That one pause is the beginning of real intellectual freedom. You are capable of seeing clearly. Protect that ability — it matters more than ever.</p>
+  `
+},
+   {
+  id: 5,
+  title: "Privacy by Design: Small Habits that Add Up",
+  date: "2026-01-30",
+  formattedDate: "Jan 30, 2026",
+  readTime: "7 min read",
+  category: "Privacy",
+  excerpt: "A practical framework for reducing your digital footprint through structured, high leverage privacy habits.",
+  image: "https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">
+    Privacy is not about disappearing from the internet, it is about reducing unnecessary exposure. You do not need extreme measures to regain control, you need structure. Every piece of data you generate increases your attack surface, your predictability, and your vulnerability. The goal is not invisibility, it is friction. When data becomes harder to collect and harder to connect, surveillance loses efficiency. Think of privacy as risk management. You cannot stop all data collection, but you can minimize what is gathered, fragment what is stored, and prevent it from forming a complete behavioral profile. Small habits, applied consistently, compound into meaningful protection.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Start With a Simple Threat Model</h2>
+
+    <p class="text-lg text-amber-200">
+    Before changing tools, clarify what you are protecting and from whom. Most people are not hiding from governments, they are protecting themselves from data brokers, advertising networks, identity theft, phishing, and account takeovers. Ask three questions. What information would harm me if leaked? Which accounts would cause serious disruption if compromised? What patterns of behavior do I not want mapped? This gives direction to your privacy efforts and prevents both paranoia and complacency.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Reduce Your App Permissions</h2>
+
+    <p class="text-lg text-amber-200">
+    Every permission you grant expands passive data collection. Many apps request access beyond what is necessary because more data improves profiling and monetization. Review camera, microphone, location, contacts, files, Bluetooth, and background refresh settings. Apply stricter defaults. Set location to while using the app, never always. Disable background refresh for non essential apps. Remove microphone access from apps that do not require recording. Turn off Bluetooth scanning if unused. Most apps function normally after unnecessary permissions are revoked. If one refuses to operate without excessive access, reconsider whether you need it.
+    </p>
+
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Permission checklist</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Location set to while using</li>
+        <li>Microphone limited to essential apps</li>
+        <li>Camera restricted to media apps</li>
+        <li>Background refresh off for non critical apps</li>
+        <li>Unused apps deleted</li>
+      </ol>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Segment Your Email Identity</h2>
+
+    <p class="text-lg text-amber-200">
+    Your primary email connects banking, recovery systems, cloud storage, and personal accounts. Using it everywhere creates a single point of failure and strengthens cross platform tracking. Use alias services to compartmentalize accounts. Create separate categories for finance, work, shopping, newsletters, and temporary signups. If one service is breached, delete the alias instead of exposing your core identity. Compartmentalization limits spam, reduces phishing risk, and weakens behavioral aggregation across services.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Strengthen Account Security</h2>
+
+    <p class="text-lg text-amber-200">
+    Password reuse remains the main vulnerability. When one platform is breached, attackers test the same credentials elsewhere. Use a password manager to generate unique passwords for every account.
+    </p>
+
+    <p class="text-lg text-amber-200">
+    Enable two factor authentication on important services. Prefer app based authentication over SMS, because text verification can be bypassed through SIM swap attacks. Strong authentication does not eliminate tracking, but it protects your digital foundation.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Upgrade Your Browser Hygiene</h2>
+
+    <p class="text-lg text-amber-200">
+    Your browser is the primary interface between you and the web. Websites collect data through cookies, fingerprinting scripts, and IP logging. Start with fundamentals rather than complex setups. Use a privacy focused browser. Install a reputable tracker blocker to prevent third party scripts from profiling your activity. Enable strict tracking protection and block third party cookies. If you use public WiFi or travel frequently, consider a reputable VPN to reduce IP based tracking. These steps significantly reduce the amount of data collected without requiring constant vigilance. The objective is fragmentation, not anonymity. When tracking signals are incomplete, profiling becomes less accurate.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Control Metadata, Not Just Content</h2>
+
+    <p class="text-lg text-amber-200">
+    Most privacy leaks happen through metadata rather than obvious disclosures. Posting times reveal routines. Location tags expose patterns. Photos often contain embedded geolocation data. Remove geotags before uploading images. Avoid sharing travel plans in real time. Delay posting vacation photos until you return. Do not publicly display boarding passes, shipping labels, or documents containing barcodes. These adjustments reduce predictability without requiring silence.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Limit Data Broker Exposure</h2>
+
+    <p class="text-lg text-amber-200">
+    Data brokers compile profiles using purchase history, address records, family associations, and inferred income. This information fuels targeted scams and identity fraud. Search your name periodically to see what is publicly exposed. Submit opt out requests to major broker databases or use automated removal services if time constrained. Reducing broker exposure directly lowers how easily your data can be aggregated.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Create a Monthly Privacy Routine</h2>
+
+    <p class="text-lg text-amber-200">
+    Privacy fails when it depends on motivation. It succeeds when it becomes maintenance. Set a recurring monthly reminder and spend twenty minutes reviewing your digital footprint.
+    </p>
+
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Monthly routine</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Review new app permissions</li>
+        <li>Delete unused apps and accounts</li>
+        <li>Check for recent data breaches tied to your email</li>
+        <li>Update passwords for critical services</li>
+        <li>Audit recent social media sharing</li>
+      </ol>
+    </div>
+
+    <p class="text-lg text-amber-200 mt-8">
+    Privacy is not about perfection, it is about leverage. Each revoked permission, each segmented account, each unique password reduces the value of your data to external actors. Over time you become harder to profile, harder to manipulate, and harder to exploit. With digital systems built on behavioral prediction, strategic unpredictability becomes a competitive advantage, and small habits create that advantage.
+    </p>
+  `
+},
+    {
+    id: 6,
+    title: "Creating with Intention: Building Useful Content for Real People",
+    date: "2026-01-12",
+    formattedDate: "Jan 12, 2026",
+    readTime: "9 min read",
+    category: "Creation",
+    excerpt: "A tactical guide to produce content that helps readers take clear next steps instead of merely scrolling past.",
+    image: "https://images.pexels.com/photos/3815586/pexels-photo-3815586.jpeg?auto=compress&cs=tinysrgb&w=800",
+    content: `
+      <p class="text-lg text-amber-200">Most content on the internet exists for one purpose: to capture attention and extract engagement. It gets you to scroll, to click, to react—but it doesn't help you do anything. This is content as entertainment, content as addiction, content as extraction.</p>
+      
+      <p class="text-lg text-amber-200">Creating with intention means making a different choice. It means asking: what do I want my reader to be able to do after they're done consuming this? If the answer is "feel entertained," you're probably creating extraction content. If the answer is "take a specific action," you're creating useful content. The difference isn't about quality or polish—it's about purpose.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Start with the Outcome</h2>
+      
+      <p class="text-lg text-amber-200">The most useful content answers an actionable question. Not a vague curiosity, but a specific problem someone needs to solve. Before you write a single word, finish this sentence: "After reading this, my reader will be able to _______."</p>
+      
+      <p class="text-lg text-amber-200">The more specific the answer, the better the content. "Understand social media" is weak. "Create a social media content calendar for the next month" is strong. "Feel better about their situation" is vague. "Decide whether to keep or delete their social media accounts based on their actual needs" is actionable.</p>
+      
+      <p class="text-lg text-amber-200">Write the outcome you want at the top of your document. Let it guide every decision you make about what to include and what to cut. If something doesn't serve the outcome, it doesn't belong—no matter how clever or interesting it is.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Work Backward from Action</h2>
+      
+      <p class="text-lg text-amber-200">Once you know the outcome, reverse-engineer the steps needed to get there. What does the reader need to know first? What prerequisites must they understand before they can understand the main point? What tools or resources do they need access to?</p>
+      
+      <p class="text-lg text-amber-200">Most content fails because it assumes too much knowledge or skips too many steps. The writer knows the topic deeply, so they unconsciously fill in gaps that are invisible to beginners. The reader, following along, nods along until suddenly they're lost—and they leave without having achieved anything.</p>
+      
+      <p class="text-lg text-amber-200">Test your content by giving it to someone who knows less than your target audience. Watch where they stumble. Those stumbling points are where you need more explanation, more examples, more bridging content.</p>
+
+      <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">The intention framework:</p>
+        <ol class="list-decimal list-inside space-y-3 text-amber-200">
+          <li><strong>Define the outcome</strong> — What specific action should the reader take?</li>
+          <li><strong>Identify prerequisites</strong> — What must they already know or have?</li>
+          <li><strong>Break into steps</strong> — What sequence of actions gets them there?</li>
+          <li><strong>Remove friction</strong> — What barriers might stop them? Remove or address each one.</li>
+          <li><strong>Provide checkpoints</strong> — How will they know they're on track?</li>
+        </ol>
+      </div>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Clear Steps Beat Clever Prose</h2>
+      
+      <p class="text-lg text-amber-200">There's a temptation among writers to prioritize style over clarity, to make content that sounds impressive rather than content that works. This is the enemy of useful content. Your reader didn't come to be impressed—they came to solve a problem.</p>
+      
+      <p class="text-lg text-amber-200">Clear writing is not simple writing. Clear writing is writing that respects the reader's time and intelligence by making the path forward as obvious as possible. Use short sentences when you need emphasis. Use numbered lists for sequences of actions. Use bold text for key concepts. Use examples that mirror the reader's actual situation.</p>
+      
+      <p class="text-lg text-amber-200">The measure of good content is not how elegantly it reads—it's how effectively it works. A piece that entertains but doesn't help has failed its purpose. A piece that helps even if it's ugly has succeeded.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">The Hook Problem</h2>
+      
+      <p class="text-lg text-amber-200">Useful content faces a challenge: it has to get read before it can help. And the internet has trained people to scroll past anything that doesn't immediately hook them. This creates pressure to sensationalize, to promise more than you deliver, to optimize for clicks over impact.</p>
+      
+      <p class="text-lg text-amber-200">The solution isn't to abandon hooks—it's to build honest hooks. A hook that accurately represents your content and lets readers self-select into it is not manipulation; it's service. You're helping people quickly determine whether your content is right for them. The headline "How to Set Up a Privacy Audit in 30 Minutes" is an honest hook. It tells people exactly what they'll get and how long it will take.</p>
+      
+      <p class="text-lg text-amber-200">Dishonest hooks might get more initial clicks, but they create readers who feel tricked, who don't trust you, who don't come back. Build an audience that trusts you to tell them exactly what they'll get. That trust is worth more than any viral moment.</p>
+
+      <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Make It Actionable</h2>
+      
+      <p class="text-lg text-amber-200">The test of useful content is simple: can the reader do something new after reading it? Not understand something new—do something new. Understanding without action is entertainment. Action without understanding is impossible. The best content delivers both, but action is the goal.</p>
+      
+      <p class="text-lg text-amber-200">Every section of your content should be building toward a specific action. When you explain a concept, immediately follow it with how to apply that concept. When you describe a problem, immediately describe a solution. When you introduce a tool, immediately show how to use it.</p>
+      
+      <p class="text-lg text-amber-200">End your content with a clear next step—not a vague "start today" but a specific "open your phone settings, go to privacy, and list which apps have location access." The more specific the action, the more likely the reader is to take it.</p>
+
+      <div class="mt-12 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+        <p class="font-semibold text-lg mb-4">Creating useful content:</p>
+        <ol class="list-decimal list-inside space-y-3 text-amber-200">
+          <li>Write your outcome statement first—keep it visible while you write</li>
+          <li>Cut anything that doesn't serve that outcome, no matter how interesting</li>
+          <li>Test your steps on someone unfamiliar with the topic</li>
+          <li>Make your action steps specific enough to execute immediately</li>
+          <li>End with one clear next step the reader can take within 5 minutes</li>
+        </ol>
+      </div>
+    `
+  },
+  {
+  id: 7,
+  title: "Future-Proof Skills: What to Learn Next",
+  date: "2025-12-05",
+  formattedDate: "Dec 5, 2025",
+  readTime: "6 min read",
+  category: "Career",
+  excerpt: "A companion piece listing durable skills and how to practice them in small, deliberate cycles.",
+  image: "https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">The skills that got you here won’t get you there. Technology, work, and society change faster than any curriculum can keep up. Future-proofing your career isn’t about predicting the next “hot skill”, it’s about developing the skills that let you learn anything else, fast and effectively.</p>
+    
+    <p class="text-lg text-amber-200">Future-proof skills are meta-skills: judgment, learning ability, deliberate practice, communication, and skill stacking. These skills compound over time while narrow technical knowledge depreciates. Invest in them, and you’ll never be left behind.</p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Develop Judgment</h2>
+    
+    <p class="text-lg text-amber-200">Knowledge is everywhere. What’s rare is judgment, the ability to decide what matters, what’s credible, and what to act on. Judgment is tested under uncertainty, time pressure, and incomplete information.</p>
+    
+    <p class="text-lg text-amber-200">You build judgment by reflecting on real decisions. Ask: what went right, what went wrong, and how would I act differently next time? Active reflection; not passive reading, is the engine of better judgment.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Practice Deliberately</h2>
+    
+    <p class="text-lg text-amber-200">Most people “practice” by repeating familiar tasks. Improvement happens slowly, if at all. Deliberate practice is different: identify the exact skill gap, design exercises targeting it, practice with full focus, and get immediate feedback.</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Deliberate practice framework:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li><strong>Identify the gap</strong> — What exactly can’t you do that you need to?</li>
+        <li><strong>Design the exercise</strong> — How can you isolate and train this skill?</li>
+        <li><strong>Get feedback</strong> — How will you know if you’re improving?</li>
+        <li><strong>Push at the edge</strong> — Work on what challenges you most.</li>
+        <li><strong>Reflect and adjust</strong> — Analyze results, tweak approach, repeat.</li>
+      </ol>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Learn How to Learn</h2>
+    
+    <p class="text-lg text-amber-200">The ultimate meta-skill is learning itself. Focus on systems for acquiring knowledge efficiently: embrace confusion, connect new info to what you know, seek feedback, and start with “just enough” to take action.</p>
+    
+    <p class="text-lg text-amber-200">Fast learners aren’t necessarily smartest, they have structured habits and processes for acquiring and applying knowledge. Anyone can build these systems with deliberate effort.</p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Communicate Effectively</h2>
+    
+    <p class="text-lg text-amber-200">Being able to do something isn’t enough if you cannot explain it. Effective communication lets you share ideas across teams, industries, and cultures. Clear, precise communication multiplies the impact of every skill you have.</p>
+
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Tips for better communication:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Write or speak daily to clarify thought.</li>
+        <li>Explain ideas to someone unfamiliar, teaching is learning.</li>
+        <li>Use examples and stories to make abstract ideas concrete.</li>
+        <li>Minimize jargon, clarity beats cleverness.</li>
+      </ol>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Stack Skills Strategically</h2>
+    
+    <p class="text-lg text-amber-200">Combine skills that rarely appear together. For example: design + psychology, coding + communication, finance + storytelling. Each alone is common; together, they create uniqueness and career leverage.</p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Use 90-Day Learning Cycles</h2>
+    
+    <p class="text-lg text-amber-200">Structure growth in short, deliberate cycles. Pick a skill or combination, define a tangible outcome, and commit to practice blocks. Create something tangible within 30 days and review your progress at the end of 90 days.</p>
+
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">90-Day learning framework:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Define the outcome: what will you achieve?</li>
+        <li>Break into sub-skills: what enables that outcome?</li>
+        <li>Schedule practice: protect focused time weekly.</li>
+        <li>Make something tangible: create, build, or demonstrate.</li>
+        <li>Review and iterate: reflect and plan next cycle(Same actions=Same outcomes).</li>
+      </ol>
+    </div>
+
+    <p class="text-lg text-amber-200 mt-8">Future-proofing isn’t about predicting trends. It’s about building practical systems and useful habits that compound your ability to adapt. Judgment, Intentional practice, constant learning, clear communication, and skill stacking, applied consistently, will keep you ahead no matter what changes.</p>
+    
+    <p class="text-sm text-amber-200 mt-6"><strong>Start today:</strong> <i>pick one meta-skill, define an outcome, schedule your practice, and take one tangible step this week. That’s how you make your career durable, resilient, and future-proof.</i></p>
+  `
+},
+{
+  id: 8,
+  title: "Prompt Engineering Made Simple: Get Better Answers from AI Every Time",
+  date: "2026-03-20",
+  readTime: "7 min read",
+  category: "AI Literacy",
+  excerpt: "You don’t need to be a tech expert. Learn the exact simple ways to talk to ChatGPT, Claude, Gemini and other AI tools so you get clear, accurate, and useful answers fast.",
+  image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">AI tools like ChatGPT, Claude or Gemini can save you hours or completely waste your time. The difference is not the AI — it is how you ask.</p>
+    
+    <p class="text-lg text-amber-200">In 2026 these models are incredibly powerful, but they still need clear instructions. Most people type short, vague questions and get vague or wrong answers. A few small changes in how you write your prompt can turn okay results into excellent ones — sometimes 5–10 times better.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why Most People Get Frustrating Results</h2>
+    
+    <p class="text-lg text-amber-200">AI does not read your mind. It predicts the most likely next words based on what you wrote. Short or unclear prompts force it to guess. That is why you often get generic answers, made-up facts, or responses that miss the point.</p>
+    
+    <p class="text-lg text-amber-200">The good news? You can remove the guessing with simple techniques anyone can learn in minutes. Better prompts mean faster work, fewer mistakes, and far more useful help from AI.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">The 6 Core Rules That Make AI Work for You</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Follow these every time:</p>
+      <ol class="list-decimal list-inside space-y-4 text-amber-200">
+        <li><strong>Be specific and detailed</strong> — Tell the AI exactly what you want, including length, format, audience and style. Vague prompts get vague answers.</li>
+        <li><strong>Give the AI a clear role</strong> — Start with “You are a patient high-school teacher” or “You are an expert career coach”. The AI performs much better when it knows its job.</li>
+        <li><strong>Ask it to think step by step</strong> — Add “think step by step” or “explain your reasoning”. This dramatically reduces hallucinations and improves logic.</li>
+        <li><strong>Provide examples</strong> — Show one or two samples of the output you want. AI copies the pattern perfectly.</li>
+        <li><strong>Set constraints</strong> — Say “maximum 150 words”, “use simple language”, “include 3 bullet points”, or “be friendly but professional”.</li>
+        <li><strong>Tell it to be honest about uncertainty</strong> — Add “if you are not sure, say so and explain why”. This stops confident wrong answers.</li>
+      </ol>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Real Before-and-After Examples</h2>
+    
+    <p class="text-lg text-amber-200"><strong>Weak prompt:</strong> Write an email about my vacation.</p>
+    <p class="text-lg text-amber-200"><strong>Strong prompt:</strong> You are a friendly coworker. Write a short, warm email to my team about my recent trip to Kenya. Include 3 specific highlights, keep it under 150 words, use a positive tone, and end with a question to start conversation.</p>
+    
+    <p class="text-lg text-amber-200 mt-6"><strong>Weak prompt:</strong> Help me study math.</p>
+    <p class="text-lg text-amber-200"><strong>Strong prompt:</strong> You are a patient math tutor for 14-year-olds. Explain how to solve quadratic equations step by step using simple words. Give 3 easy examples with full solutions. Then create 2 practice problems for me to try and explain the answers after I reply.</p>
+    
+    <p class="text-lg text-amber-200 mt-6"><strong>Weak prompt:</strong> Plan my week.</p>
+    <p class="text-lg text-amber-200"><strong>Strong prompt:</strong> You are an organized productivity coach. Create a realistic daily schedule for me next week. I work 9–5, have 2 hours of evening study time, and want to exercise 3 times. Include breaks, meal times, and one fun activity. Format as a clean daily list.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Advanced but Easy Tricks (2026 Edition)</h2>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li><strong>Chain-of-Thought prompting</strong> — Add “think step by step and show your reasoning” for math, planning, or decision-making tasks.</li>
+      <li><strong>Iterate</strong> — If the first answer is not perfect, reply with “Make it shorter and more friendly” or “Add one more example”. Treat AI like a helpful assistant you can refine.</li>
+      <li><strong>Role stacking</strong> — Combine roles: “You are an expert writer and a friendly teacher who explains things simply.”</li>
+    </ul>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Fix Common Problems in Seconds</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Quick fixes you can add to any prompt:</p>
+      <ul class="list-disc list-inside space-y-2 text-amber-200">
+        <li>AI gives wrong facts → Add “Use only accurate, up-to-date information. Say if you are unsure.”</li>
+        <li>Answer too long or too short → Add “Maximum 200 words” or “Give a detailed 400-word answer”</li>
+        <li>Answer feels boring → Add “Make it engaging and fun to read, like talking to a friend”</li>
+        <li>Answer is too formal → Add “Use simple, everyday language”</li>
+        <li>AI repeats itself → Add “Do not repeat information”</li>
+      </ul>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Your 7-Day Prompt Mastery Plan</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Follow this simple plan and you will see dramatic improvement:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Day 1–2: Use the 6 rules on every prompt you write</li>
+        <li>Day 3–4: Try one “opposite search” or planning task with chain-of-thought</li>
+        <li>Day 5–6: Practice iteration — improve the first answer with a follow-up prompt</li>
+        <li>Day 7: Review the 3 best and 3 worst answers you got. Notice the difference.</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-8">Prompt engineering is quickly becoming one of the most useful skills of 2026. The more clearly you speak to AI, the more it feels like having a smart, tireless assistant who actually understands you.</p>
+    
+    <p class="text-lg text-amber-200 mt-6 font-semibold">Start right now. Take any task you need help with today and write one strong prompt using the rules above. You will immediately see the difference. Better prompts equal better results — and you now know exactly how to get them.</p>
+    
+    <p class="text-lg text-amber-200 mt-4">You’ve got this. Go make AI work for you.</p>
+  `
+},
+{
+  id: 9,
+  title: "How to Spot Deepfakes in 2026: Simple Signs Anyone Can Check",
+  date: "2026-03-25",
+  readTime: "8 min read",
+  category: "Critical Thinking",
+  excerpt: "Deepfakes look almost perfect now — but they still leave tiny clues. Learn the visual, audio, and context signs to spot fakes fast, plus the best free tools to double-check before you believe or share.",
+  image: "https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">Imagine scrolling and seeing your favorite musician "confess" to something shocking, or a world leader "declare" war. It looks and sounds completely real. But in 2026, it was probably made by AI in under a minute — and shared millions of times before anyone notices.</p>
+    
+    <p class="text-lg text-amber-200">Deepfakes have improved massively. Hollywood-level fakes are now free or cheap for anyone. But here's the good news: even the best AI still makes small, consistent mistakes. These tiny flaws are your defense. You don't need to be a tech expert — just know what to look for. This guide gives you simple, reliable ways to spot fakes in videos, images, and audio before you share or believe them.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why Even Smart People Fall for Deepfakes</h2>
+    
+    <p class="text-lg text-amber-200">Our brains are wired to trust what looks and sounds familiar. Deepfakes exploit that by copying faces, voices, and mannerisms almost perfectly. But they struggle with physics, biology, and tiny inconsistencies humans notice subconsciously. In 2026, the biggest danger isn't perfect fakes — it's that most people don't pause to check. One quick look for these clues can save you from scams, misinformation, or emotional manipulation.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">10 Visual & Audio Clues Still Reliable in 2026</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Watch and listen carefully — these giveaways persist even in advanced models:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li><strong>Unnatural or missing blinking</strong> — Real people blink every 2–10 seconds naturally. Deepfakes often have too few blinks, too many, or none at all during long takes.</li>
+        <li><strong>Overly smooth or waxy skin</strong> — No visible pores, fine wrinkles, or natural skin texture. It looks like heavy digital makeup or a plastic doll face.</li>
+        <li><strong>Lip-sync mismatches</strong> — Mouth movements slightly off from words (tiny delay, wrong shape on certain sounds like "B" or "P"). Slow down playback to 0.5x to spot it easily.</li>
+        <li><strong>Strange eyes or reflections</strong> — Eyes look flat/dead, mismatched color, or wrong light reflections in pupils. Real eyes sparkle and reflect surroundings naturally.</li>
+        <li><strong>Teeth issues</strong> — Teeth blur, change shape between frames, look unnaturally perfect/white, or disappear slightly when mouth opens wide.</li>
+        <li><strong>Lighting & shadow errors</strong> — Face shadows don't match background light source. One side lit differently, or shadows "float" unnaturally.</li>
+        <li><strong>Edge & hair problems</strong> — Blurry, flickering, or melting edges around hair, ears, neck, or glasses — especially during movement or head turns.</li>
+        <li><strong>Breathing & mouth sounds odd</strong> — Breath inserted at wrong times, repeated identical breaths, or no natural pauses for air in speech.</li>
+        <li><strong>Profile/head turn failures</strong> — Many models train mostly on front-facing shots. Side views or 90° turns often show warped jaws, detached ears, or melting features.</li>
+        <li><strong>Unnatural micro-expressions</strong> — Face stays too still or shows robotic symmetry. Real emotions create tiny asymmetries and fleeting expressions.</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-6">Pro tip: Pause the video, zoom in on the face, and scrub slowly frame-by-frame. Many flaws jump out only when you look closely or slow things down.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Audio-Only Deepfakes (Voice Clones) — Extra Clues</h2>
+    
+    <p class="text-lg text-amber-200">Voice deepfakes are exploding in scams (fake family emergencies, boss calls). Listen for:</p>
+    <ul class="list-disc list-inside space-y-2 text-amber-200 mt-4">
+      <li>Flat or robotic tone — missing natural emotion rises/falls.</li>
+      <li>Repeated phrases or breathing loops.</li>
+      <li>Background noise that doesn't match the claimed location.</li>
+      <li>Weird pauses or unnatural rhythm in speech.</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-4">If it's just audio (no video), ask the person a random personal question only they would know — deepfakes can't improvise well in real time.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Best Free Tools to Double-Check in 2026</h2>
+    
+    <p class="text-lg text-amber-200">Your eyes and ears catch most fakes — but tools give extra confidence. Here are reliable free(ish) options that still work well:</p>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Quick tools to try right now:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li><strong>Content Authenticity Initiative Verify</strong> — Go to verify.contentauthenticity.org. Upload image/video. Checks C2PA metadata (digital signature many real creators add now). No badge? Raise suspicion.</li>
+        <li><strong>Deepware Scanner</strong> — deepware.ai (free tier). Upload video — it scans for facial inconsistencies and GAN artifacts quickly.</li>
+        <li><strong>InVID Verification Extension</strong> — Free Chrome/Firefox add-on (journalist favorite). Right-click video/image → analyze keyframes, reverse search, metadata check.</li>
+        <li><strong>Microsoft Video Authenticator</strong> — Still free via their site or app. Gives confidence score + highlights manipulation zones (blinks, skin, lips).</li>
+        <li><strong>Google Reverse Image Search + TinEye</strong> — For still images: upload to images.google.com or tineye.com. See if it's recycled/old or appears only on sketchy sites.</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-6">None are 100% accurate (AI arms race continues), but combining 2–3 tools + your own eyes gives very high confidence.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Your 7-Step Deepfake Defense Routine</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Make this your habit before believing or sharing:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Pause & zoom — check eyes, mouth, skin texture closely.</li>
+        <li>Slow playback to 0.5x — watch for sync, edges, head turns.</li>
+        <li>Listen carefully — unnatural breathing, tone, or pauses?</li>
+        <li>Ask: Does this make sense? Is the timing/context suspicious?</li>
+        <li>Check source — who posted it? Trusted or random account?</li>
+        <li>Reverse search image/video keyframes (Google/TinEye/InVID).</li>
+        <li>Run through 1–2 detector tools if still unsure.</li>
+      </ol>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Final Thought: Pause Is Your Superpower</h2>
+    
+    <p class="text-lg text-amber-200 mt-4">Deepfakes can't be stopped completely — but you can stop them from working on you. The real weapon isn't perfect tech; it's developing the habit of pausing before reacting. One extra 30 seconds of checking protects your mind, your relationships, and the truth online.</p>
+    
+    <p class="text-lg text-amber-200 mt-6">Next time something feels "off" — trust that feeling. Zoom in. Slow down. Verify. You're not paranoid — you're informed. And in 2026, that's the strongest skill anyone can have.</p>
+    
+    <p class="text-lg text-amber-200 mt-8 font-semibold">Start today: The next viral video you see, run through the 7-step routine. You'll be amazed how many fakes you catch — and how much clearer the real world becomes.</p>
+  `
+},
+{
+  id: 10,
+  title: "Screen Time and Your Mind: Easy Ways to Feel Better in 2026",
+  date: "2026-03-30",
+  readTime: "7 min read",
+  category: "Digital Well-Being",
+  excerpt: "Heavy screen use quietly damages sleep quality, mood stability, focus and daily energy. Science clearly shows the links — but realistic small changes reverse most of the harm without forcing you to abandon your devices.",
+  image: "https://images.pexels.com/photos/4492127/pexels-photo-4492127.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">Your smartphone feels essential — it keeps you informed, entertained and connected. Yet many people finish the day feeling mentally foggy, irritable, restless or unexpectedly low. Research from 2024–2026 consistently shows that more than 3–4 hours of non-work recreational screen time per day is strongly linked to:</p>
+    
+    <ul class="list-disc list-inside space-y-2 text-amber-200 mt-4">
+      <li>Delayed sleep onset and poorer sleep quality</li>
+      <li>Higher reports of anxiety and depressive symptoms</li>
+      <li>Reduced attention span and working memory</li>
+      <li>Increased feelings of loneliness despite being “connected”</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-6">The encouraging part? You do not need extreme digital detoxes. Small, sustainable adjustments — ones you can actually maintain — produce noticeable improvements in energy, mood and mental clarity within 1–2 weeks.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Why Screens Affect Your Brain and Emotions</h2>
+    
+    <p class="text-lg text-amber-200">Several mechanisms are at play — all backed by sleep labs, psychology studies and large-scale surveys:</p>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li><strong>Blue light blocks melatonin</strong> — Screens emit short-wavelength blue light that tricks your suprachiasmatic nucleus (the brain’s clock) into delaying sleep signals by 1–3 hours.</li>
+      <li><strong>Dopamine loops keep you hooked</strong> — Likes, notifications and endless feeds deliver fast micro-rewards, then leave you craving more — similar to slot-machine psychology.</li>
+      <li><strong>Social comparison erodes self-worth</strong> — Curated feeds show only polished moments, triggering upward comparison that quietly increases envy, inadequacy and low mood over months.</li>
+      <li><strong>Sleep displacement</strong> — Every extra hour on screens often replaces deeper rest or face-to-face interaction, both of which protect mental health far better than passive scrolling.</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-6">Breaking even one or two of these loops creates a positive ripple effect across sleep, focus and emotional resilience.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Realistic Changes That Actually Work</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Choose 2–3 that match your lifestyle and begin this week:</p>
+      <ol class="list-decimal list-inside space-y-4 text-amber-200">
+        <li>
+          <strong>Activate night shift / warm filter 2–3 hours before bedtime</strong><br>
+          Most phones offer this in display settings. It reduces blue light intensity. Studies show 1–2 hours of filtered evening use improves sleep onset by 20–40 minutes for many people.
+        </li>
+        <li>
+          <strong>Create a strict no-screen hour before sleep</strong><br>
+          Replace the habit with low-stimulation activities: paper book, gentle stretching, gratitude list, herbal tea, or quiet conversation. Within 3–5 nights most notice falling asleep faster and waking more refreshed.
+        </li>
+        <li>
+          <strong>Set daily app time limits on entertainment platforms</strong><br>
+          Use your phone’s native tools (iOS Screen Time or Android Digital Wellbeing). Start conservative: 45 minutes total for TikTok/Instagram/YouTube combined. The forced pause helps break autopilot scrolling.
+        </li>
+        <li>
+          <strong>Practice the 20-20-20 rule during long sessions</strong><br>
+          Every 20 minutes, look at an object 20 feet away for 20 seconds. This relaxes eye strain, reduces headache risk and gives your prefrontal cortex (focus center) a micro-break.
+        </li>
+        <li>
+          <strong>Try grayscale mode for a day or two each week</strong><br>
+          Accessibility → Display → Color Filters → Grayscale. Colorful interfaces lose appeal fast — users often cut recreational time by 25–50% without feeling deprived.
+        </li>
+        <li>
+          <strong>Establish 2–3 daily phone-free moments</strong><br>
+          Examples: no phone during meals, first 30 minutes after waking, or entire evening walk. These pockets rebuild attention and real human connection.
+        </li>
+      </ol>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Replace the Habit — Don’t Just Remove It</h2>
+    
+    <p class="text-lg text-amber-200">When you reduce scrolling, boredom or discomfort can pull you right back. Filling the gap with rewarding alternatives prevents relapse:</p>
+    
+    <ul class="list-disc list-inside space-y-2 text-amber-200">
+      <li>Short outdoor walk (even 10 minutes — sunlight resets circadian rhythm)</li>
+      <li>Call or meet a friend instead of texting</li>
+      <li>Simple hobby (sketching, cooking, playing an instrument, puzzles)</li>
+      <li>5-minute breathing or body-scan meditation</li>
+      <li>Journal three things you are grateful for</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-4">These activities deliver slower but more stable dopamine and strengthen emotional regulation far better than feeds.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Quick Answers to Common Excuses</h2>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li><strong>“I need my phone to relax”</strong> → True relaxation comes from lower arousal. Try grayscale + a podcast instead of video scrolling.</li>
+      <li><strong>“I’ll miss important messages”</strong> → Turn on Do Not Disturb with exceptions for favorites. Check messages only at set times.</li>
+      <li><strong>“Everyone else is on it all day”</strong> → Comparison is the trap. Your energy and clarity matter more than matching others’ habits.</li>
+    </ul>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Track & Celebrate Progress</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">One-minute weekly check-in:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li>Sunday: review weekly screen-time average and top apps</li>
+        <li>Choose one small tightening goal (e.g., cut one app by 15 min/day)</li>
+        <li>Plan 1–2 protected phone-free windows daily</li>
+        <li>End of week: rate mood / focus / sleep on 1–10. Any +1 is worth celebrating</li>
+      </ol>
+    </div>
+    
+    <p class="text-lg text-amber-200 mt-8">Your brain was never designed for constant digital input. Protect it with gentle boundaries. Pick one change tonight — perhaps enabling night shift and leaving the phone charging outside the bedroom. In a few days you will likely notice steadier energy, better sleep and a calmer mind. That small win belongs to you.</p>
+  `
+},
+{
+  id: 11,
+  title: "Escape the Filter Bubble: See More of the Real World Online",
+  date: "2026-04-05",
+  readTime: "7 min read",
+  category: "Critical Thinking",
+  excerpt: "Algorithms quietly shape a version of reality that matches what you already believe. This filter bubble deepens division, hides facts, and shrinks understanding. Break free with practical habits that restore balance without deleting your accounts.",
+  image: "https://images.pexels.com/photos/4145195/pexels-photo-4145195.jpeg?auto=compress&cs=tinysrgb&w=800",
+  content: `
+    <p class="text-lg text-amber-200">Open any social app or search engine. The content feels tailor-made for you — because it is. Every post, video, and headline aligns with your existing views, interests, and emotions. That perfect fit is not coincidence; it is the filter bubble at work. Recommendation algorithms are designed to maximize engagement, so they show you more of what keeps you scrolling and hide what might make you pause, think, or leave.</p>
+    
+    <p class="text-lg text-amber-200">Over months this creates a narrow, reinforced reality. Opposing ideas become rare, then invisible. People who disagree start seeming extreme or irrational. Important stories that challenge your assumptions get buried. In 2026, with more advanced personalization and longer daily screen time, the bubble is tighter than ever — and escaping it has become one of the most valuable mental upgrades you can make.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">How Filter Bubbles Actually Form and What They Cost</h2>
+    
+    <p class="text-lg text-amber-200">Three forces combine to build the bubble:</p>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li><strong>Engagement-first algorithms</strong> — Platforms prioritize content that triggers strong reactions (anger, fear, moral outrage) because these drive far more time spent than calm or balanced information.</li>
+      <li><strong>Behavioral personalization</strong> — Every click, dwell time, like, share, or skip teaches the system your preferences. It then amplifies similar content and suppresses the rest.</li>
+      <li><strong>Social homophily</strong> — Humans naturally connect with similar people. The algorithm notices and recommends more of those connections, turning mild leanings into echo chambers.</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-6">The hidden costs include:</p>
+    
+    <ul class="list-disc list-inside space-y-2 text-amber-200">
+      <li>Reduced empathy and understanding of other perspectives</li>
+      <li>Increased polarization and online hostility</li>
+      <li>Weaker ability to spot misinformation that aligns with your views</li>
+      <li>Emotional exhaustion from constant outrage reinforcement</li>
+      <li>Missed opportunities to learn from ideas outside your bubble</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-4">The solution is not rejection of technology. It is intentional curation — small habits that force exposure to a wider, more accurate picture of reality.</p>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">7 Practical Ways to Break the Bubble</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">These low-effort tactics work in 2026 — start with 2 or 3:</p>
+      <ol class="list-decimal list-inside space-y-4 text-amber-200">
+        <li>
+          <strong>Follow calm, reasoned voices from the other side</strong><br>
+          Search for phrases like “thoughtful conservative/liberal take” or “balanced view on [topic]”. Follow 3–5 people who explain rather than attack. Mute rage-bait accounts immediately.
+        </li>
+        <li>
+          <strong>Use private/incognito mode for searches and news</strong><br>
+          Open a private browsing tab when researching controversial topics. Without your history, algorithms show a less personalized (and often more neutral) set of results.
+        </li>
+        <li>
+          <strong>Search deliberately for opposing arguments</strong><br>
+          Weekly habit: type “strongest arguments against [your position]” or “why smart people believe [opposite view]”. Read at least two sources fairly — goal is understanding, not winning.
+        </li>
+        <li>
+          <strong>Diversify your news sources intentionally</strong><br>
+          Pick three outlets with different leanings (e.g., Reuters/AP for neutral facts, one center-left, one center-right). Use Ground News or AllSides to see bias ratings and blind-spot coverage. Rotate which one you check first each morning.
+        </li>
+        <li>
+          <strong>Switch to chronological feeds when available</strong><br>
+          Many platforms now have a “Following” or “Latest” tab instead of “For You”. Use it — you see posts from people you chose, not what the algorithm predicts will addict you.
+        </li>
+        <li>
+          <strong>Install browser extensions for balance</strong><br>
+          Try “Escape Your Bubble” (Chrome), “Flip Side” or “Read Across the Aisle” extensions. They insert counter-perspectives or show how the same story is covered differently across outlets.
+        </li>
+        <li>
+          <strong>Schedule weekly “contrarian reading” time</strong><br>
+          Set a 15-minute recurring reminder. Read one article or thread that challenges a belief you hold strongly. Treat discomfort as evidence of growth.
+        </li>
+      </ol>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Your 30-Day Bubble Escape Plan</h2>
+    
+    <div class="mt-8 border-l-4 border-sqPrimary pl-6 py-6 bg-sqCard/50 rounded-r-3xl">
+      <p class="font-semibold text-lg mb-4">Follow this step-by-step roadmap:</p>
+      <ol class="list-decimal list-inside space-y-3 text-amber-200">
+        <li><strong>Week 1</strong> — Follow 5 thoughtful accounts with different views. Switch at least one feed to chronological mode.</li>
+        <li><strong>Week 2</strong> — Do 3 deliberate “opposite viewpoint” searches. Read fully without debating in your head.</li>
+        <li><strong>Week 3</strong> — Rotate three diverse news sources daily. Notice which stories are missing from your usual feed.</li>
+        <li><strong>Week 4</strong> — Add your weekly contrarian 15 minutes. At month end, reflect: Do I understand disagreements better? Is my online experience calmer? Celebrate progress.</li>
+      </ol>
+    </div>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Common Pitfalls and Quick Fixes</h2>
+    
+    <ul class="list-disc list-inside space-y-3 text-amber-200">
+      <li><strong>“It feels uncomfortable”</strong> → That is normal and temporary. Growth lives outside comfort. Start with short sessions.</li>
+      <li><strong>“I don’t have time”</strong> → 10–15 minutes a day is enough. Replace one doom-scroll session with contrarian reading.</li>
+      <li><strong>“The other side is just wrong”</strong> → Understanding does not mean agreeing. Knowing why reasonable people disagree strengthens your own positions.</li>
+    </ul>
+    
+    <h2 class="text-2xl font-semibold mt-10 mb-6 text-sqPrimary">Signs You Are Breaking Free</h2>
+    
+    <ul class="list-disc list-inside space-y-2 text-amber-200">
+      <li>You can accurately explain an opposing view without caricature</li>
+      <li>Strong disagreements no longer trigger instant emotional reactions</li>
+      <li>You notice facts or angles you previously missed</li>
+      <li>Your feed feels less outrage-heavy and more informative</li>
+      <li>You ask more questions and make fewer assumptions in discussions</li>
+    </ul>
+    
+    <p class="text-lg text-amber-200 mt-8">Escaping the filter bubble does not require abandoning social media or becoming politically neutral. It requires only the choice to see more than the algorithm wants to show you. That single decision — repeated consistently — makes you harder to manipulate, better at thinking, and more connected to reality.</p>
+    
+    <p class="text-lg text-amber-200 mt-6 font-semibold">Start right now. Open a private tab. Search for the strongest, most reasonable argument against one belief you hold firmly. Read it with curiosity instead of defense. That small act cracks the bubble open — and once you see outside, you will never want to go back inside.</p>
+  `
+}
+];
+
+// ==================== RENDERING & INTERACTIVITY ====================
+function formatDate(iso) {
+  try { return new Date(iso).toLocaleDateString(undefined, {year: 'numeric', month: 'short', day: 'numeric'}); }
+  catch (e) { return iso; }
+}
+
+const articleListEl = document.getElementById('articleList');
+const activeContainer = document.getElementById('activeArticleContainer');
+const heroName = document.getElementById('heroName');
+const userGreeting = document.getElementById('userGreeting');
+
+// Sort by date descending so newest appears first
+articles.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+let activeArticleId = articles[0]?.id || null;
+
+function renderArticleList() {
+  articleListEl.innerHTML = '';
+  articles.forEach(article => {
+    const btn = document.createElement('button');
+    btn.className = 'w-full text-left p-4 rounded-2xl border border-stone-700 bg-sqCard/40 article-card card-hover flex items-start gap-4';
+    if (article.id === activeArticleId) btn.classList.add('active');
+    btn.dataset.id = article.id;
+    btn.innerHTML = `
+      <img src="${article.image}" alt="" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+      <div class="flex-1">
+        <div class="text-xs text-amber-300">${formatDate(article.date)} • ${article.readTime}</div>
+        <div class="font-semibold mt-1">${article.title}</div>
+        <div class="text-sm text-amber-200 mt-2">${article.excerpt}</div>
+      </div>
+    `;
+    btn.addEventListener('click', () => setActiveArticle(article.id));
+    articleListEl.appendChild(btn);
+  });
+}
+
+function renderActiveArticle() {
+  const article = articles.find(a => a.id === activeArticleId) || articles[0];
+  if (!article) return;
+  activeContainer.classList.remove('animate-fadeIn');
+  void activeContainer.offsetWidth; // force reflow for animation
+  activeContainer.classList.add('animate-fadeIn');
+  activeContainer.innerHTML = `
+    <div class="rounded-3xl overflow-hidden border border-stone-700 bg-sqCard p-8">
+      <img src="${article.image}" alt="" class="w-full h-64 object-cover rounded-2xl mb-6">
+      <div class="text-xs text-amber-300">${article.category} • ${formatDate(article.date)} • ${article.readTime}</div>
+      <h2 class="text-3xl font-semibold mt-3 mb-4">${article.title}</h2>
+      <div class="prose prose-invert text-amber-200 max-w-none">${article.content}</div>
+    </div>
+  `;
+
+  
+  // update active class on list
+  document.querySelectorAll('.article-card').forEach(el => {
+    el.classList.toggle('active', Number(el.dataset.id) === article.id);
+  });
+}
+
+function setActiveArticle(id) {
+  activeArticleId = id;
+  renderArticleList();
+  renderActiveArticle();
+}
+
+function logout() {
+  localStorage.removeItem('skillqraft_auth_token');
+  window.location.replace('index.html');
+}
+
+function toggleMobileMenu() {
+  const m = document.getElementById('mobileMenu');
+  if (!m) return;
+  m.classList.toggle('hidden');
+}
+
+function populateUser() {
+  const name = localStorage.getItem('skillqraft_user') || localStorage.getItem('skillqraft_username') || 'friend';
+  heroName.textContent = name.split(' ')[0];
+  userGreeting.textContent = name;
+}
+
+// Initialize page
+populateUser();
+renderArticleList();
+renderActiveArticle();
+
+// Save what you last read (only for this visit)
+window.addEventListener('beforeunload', () => {
+  localStorage.setItem('skillqraft_last_article', String(activeArticleId));
+});
+
+// NEW: Always show the most recent article by date when the page loads
+// (we removed the restore so newest = default every time)
+
+
+
+ // ====== CATEGORY FILTER & ARTICLE RENDERING ======
+const categoryFilter = document.getElementById('categoryFilter');
+const articleList = document.getElementById('articleList');
+const activeArticleContainer = document.getElementById('activeArticleContainer');
+
+function renderArticles(filter = 'all') {
+  articleList.innerHTML = ''; // clear current articles
+
+  const filtered = filter === 'all' 
+    ? articles 
+    : articles.filter(a => a.category === filter);
+
+  if (filtered.length === 0) {
+    articleList.innerHTML = `<p class="text-stone-500 text-sm">No articles found in this category.</p>`;
+    return;
+  }
+
+  filtered.forEach(article => {
+    const articleEl = document.createElement('div');
+    articleEl.className = 'article-card p-4 bg-sqCard rounded-xl border border-stone-700 hover:border-sqPrimary/50 cursor-pointer transition';
+
+    articleEl.innerHTML = `
+      <img src="${article.image}" alt="${article.title}" class="w-full h-36 object-cover rounded-lg mb-3">
+      <h3 class="font-semibold text-amber-200">${article.title}</h3>
+      <p class="text-xs text-stone-400">${article.readTime} • ${article.date}</p>
+      <p class="mt-1 text-sm text-amber-300">${article.excerpt}</p>
+    `;
+
+    articleEl.addEventListener('click', () => {
+  activeArticleContainer.innerHTML = `
+    <img src="${article.image}" alt="${article.title}" class="w-full h-64 object-cover rounded-xl mb-6">
+    <h2 class="text-3xl font-semibold text-amber-200 mb-4">${article.title}</h2>
+    ${article.content}
+  `;
+  activeArticleContainer.classList.remove('content-hidden');
+
+  // Highlight active card
+  document.querySelectorAll('.article-card').forEach(c => c.classList.remove('active'));
+  articleEl.classList.add('active');
+
+  // Smooth scroll
+  activeArticleContainer.scrollIntoView({ behavior: 'smooth' });
+});
+
+
+    articleList.appendChild(articleEl);
+  });
+}
+
+// INITIAL RENDER
+renderArticles();
+
+// UPDATE ARTICLES ON CATEGORY CHANGE
+categoryFilter.addEventListener('change', (e) => {
+  renderArticles(e.target.value);
+});
+
+
+// ==================== AUTH & USER ====================
+// Safely parse user data from localStorage
+function getUserData() {
+  try {
+    const userData = localStorage.getItem('skillqraft_user');
+    if (!userData) return { firstName: 'Learner' };
+    
+    const user = JSON.parse(userData);
+    
+    // Validate that user is an object with expected properties
+    if (typeof user === 'object' && user !== null && user.firstName) {
+      return { firstName: user.firstName };
+    }
+    
+    return { firstName: 'Learner' };
+  } catch (e) {
+    console.warn('Error parsing user data:', e);
+    return { firstName: 'Learner' };
+  }
+}
+
+// Get user data and display it safely
+const user = getUserData();
+document.getElementById('userGreeting').textContent = user.firstName;
+document.getElementById('heroName').textContent = user.firstName;
+
+function logout() {
+  if (confirm("Sign out of SkillQraft?")) {
+    localStorage.removeItem('skillqraft_auth_token');
+    localStorage.removeItem('skillqraft_user');
+    window.location.href = 'index.html';
+  }
+}
+
+// Mobile menu toggle
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+//
+</script>
+
+</body>
+</html>

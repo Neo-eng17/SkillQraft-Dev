@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillQraft | Home</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sqPrimary: '#f59e0b',
+        sqPrimaryDark: '#d97706',
+        sqBg: '#1c1917',
+        sqCard: '#292524',
+      }
+    }
+  }
+}
+</script>
+
+<style>
+@keyframes floatSlow {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.animate-float { animation: floatSlow 7s ease-in-out infinite; }
+.animate-fadeUp { animation: fadeUp 1s ease forwards; }
+.delay-200 { animation-delay: .2s; }
+.delay-400 { animation-delay: .4s; }
+.delay-600 { animation-delay: .6s; }
+</style>
+</head>
+
+<body class="bg-sqBg text-amber-50 min-h-screen flex flex-col scroll-smooth">
+
+<!-- Background Glow -->
+<div class="fixed -top-32 -left-32 w-96 h-96 bg-sqPrimary/20 blur-3xl rounded-full animate-float -z-10"></div>
+<div class="fixed bottom-0 right-0 w-96 h-96 bg-orange-300/10 blur-3xl rounded-full animate-float -z-10"></div>
+
+<!-- NAVBAR -->
+<nav class="w-full border-b border-stone-800 bg-sqBg/80 backdrop-blur sticky top-0 z-30">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="home.html" class="flex items-center gap-2">
+      <div class="h-8 w-8 rounded-lg bg-sqPrimary flex items-center justify-center font-bold text-sqBg">SQ</div>
+      <span class="font-semibold tracking-tight">SkillQraft</span>
+    </a>
+
+    <!-- Mobile Button -->
+    <button id="mobileMenuBtn" class="md:hidden">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h12"/>
+      </svg>
+    </button>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a href="home.html" class="px-3 py-1.5 rounded-full bg-sqPrimary text-sqBg">Home</a>
+      <a href="resources.html" class="px-3 py-1.5 rounded-full hover:bg-sqPrimary/20 transition">Resources</a>
+      <a href="services.html" class="px-3 py-1.5 rounded-full hover:bg-sqPrimary/20 transition">Our Services</a>
+      <a href="digital-news.html" class="px-3 py-1.5 rounded-full hover:bg-sqPrimary/20 transition">Digital News</a>
+      <a href="contact.html" class="px-4 py-2 rounded-full bg-sqPrimary hover:bg-sqPrimaryDark text-sqBg font-semibold transition">
+        Talk to SkillQraft
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="md:hidden hidden border-t border-stone-800 bg-sqBg/95">
+    <div class="px-4 py-4 flex flex-col gap-3 text-sm">
+      <a href="home.html" class="px-3 py-2 rounded-lg bg-sqPrimary text-sqBg text-center">Home</a>
+      <a href="resources.html" class="px-3 py-2 rounded-lg border border-stone-700 text-center">Resources</a>
+      <a href="services.html" class="px-3 py-2 rounded-lg border border-stone-700 text-center">Our Services</a>
+      <a href="digital-news.html" class="px-3 py-2 rounded-lg border border-stone-700 text-center">Digital News</a>
+      <a href="contact.html" class="px-3 py-2 rounded-lg bg-sqPrimary text-sqBg text-center font-semibold">
+        Talk to SkillQraft
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="flex-1 flex items-center justify-center px-6 py-20 text-center">
+  <div class="max-w-3xl animate-fadeUp delay-200">
+    <h1 class="text-3xl md:text-5xl font-semibold leading-tight">
+      Craft your digital mastery with clarity.
+    </h1>
+    <p class="mt-6 text-amber-200 text-sm md:text-base">
+      SkillQraft is your warm learning space — practical tools, guided services,
+      and real-world digital skills designed for builders.
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="resources.html"
+        class="px-6 py-3 rounded-full bg-sqPrimary hover:bg-sqPrimaryDark text-sqBg font-semibold shadow-lg transition transform hover:-translate-y-1">
+        Explore Resources
+      </a>
+      <a href="services.html"
+        class="px-6 py-3 rounded-full border border-sqPrimary text-sqPrimary hover:bg-sqPrimary hover:text-sqBg transition transform hover:-translate-y-1">
+        Work With Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE SECTION -->
+<section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
+
+  <div class="bg-sqCard/70 border border-stone-800 p-6 rounded-2xl hover:shadow-xl transition transform hover:-translate-y-1">
+    <h3 class="font-semibold text-lg">Practical Resources</h3>
+    <p class="text-sm text-amber-200 mt-2">
+      Actionable PDFs, tools, and systems that help you move from theory to real execution.
+    </p>
+  </div>
+
+  <div class="bg-sqCard/70 border border-stone-800 p-6 rounded-2xl hover:shadow-xl transition transform hover:-translate-y-1">
+    <h3 class="font-semibold text-lg">Guided Services</h3>
+    <p class="text-sm text-amber-200 mt-2">
+      Done-with-you support for portfolios, freelancing, and personal branding clarity.
+    </p>
+  </div>
+
+  <div class="bg-sqCard/70 border border-stone-800 p-6 rounded-2xl hover:shadow-xl transition transform hover:-translate-y-1">
+    <h3 class="font-semibold text-lg">Community Growth</h3>
+    <p class="text-sm text-amber-200 mt-2">
+      Learn alongside ambitious builders who take real action on digital opportunities.
+    </p>
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="text-center py-16 border-t border-stone-800">
+  <h2 class="text-2xl font-semibold">Ready to forge your future?</h2>
+  <p class="text-amber-200 mt-3 text-sm">
+    Choose a resource, enroll in a service, or connect with us directly.
+  </p>
+  <a href="contact.html"
+     class="mt-6 inline-flex px-6 py-3 rounded-full bg-sqPrimary hover:bg-sqPrimaryDark text-sqBg font-semibold transition transform hover:-translate-y-1">
+    Start Now
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-stone-800 bg-sqCard/50">
+  <div class="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8 text-sm">
+
+    <!-- Logo -->
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <div class="h-8 w-8 rounded-lg bg-sqPrimary flex items-center justify-center font-bold text-sqBg">SQ</div>
+        <span class="font-semibold">SkillQraft</span>
+      </div>
+      <p class="text-amber-200 text-xs">
+        Forging your Future through practical digital skill mastery.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h3 class="font-semibold mb-3">Quick Links</h3>
+      <ul class="space-y-2 text-amber-200 text-sm">
+        <li><a href="home.html" class="hover:text-white">Home</a></li>
+        <li><a href="resources.html" class="hover:text-white">Resources</a></li>
+        <li><a href="services.html" class="hover:text-white">Our Services</a></li>
+        <li><a href="digital-news.html" class="hover:text-white">Digital News</a></li>
+        <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div>
+      <h3 class="font-semibold mb-3">Join Self Learning INDIVIDUALS</h3>
+      <form name="newsletter" method="POST" data-netlify="true" class="flex gap-2">
+        <input type="hidden" name="form-name" value="newsletter">
+        <input type="email" name="email" required
+          placeholder="Your email"
+          class="flex-1 rounded-lg px-3 py-2 bg-stone-900 border border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-sqPrimary"/>
+        <button type="submit"
+          class="px-4 py-2 rounded-lg bg-sqPrimary hover:bg-sqPrimaryDark text-sqBg text-sm font-semibold transition">
+          Join
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="text-center text-xs text-amber-300 py-4 border-t border-stone-800">
+    © 2026 SkillQraft. Forging your Future.
+  </div>
+</footer>
+
+<script>
+// Mobile Menu Toggle
+document.getElementById("mobileMenuBtn")
+  .addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+</script>
+
+</body>
+</html>

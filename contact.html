@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillQraft | Let's Talk • Your Next Step Starts Here</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sqPrimary: '#f59e0b',
+        sqPrimaryDark: '#d97706',
+        sqBg: '#1c1917',
+        sqCard: '#292524',
+      }
+    }
+  }
+}
+</script>
+
+<style>
+@keyframes slowFloat {0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+@keyframes fadeInUp {from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.animate-float {animation:slowFloat 7s ease-in-out infinite;}
+.animate-fadeInUp {animation:fadeInUp 0.8s ease forwards;}
+.card-hover {transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
+.card-hover:hover {transform: translateY(-6px);}
+</style>
+</head>
+
+<body class="bg-sqBg text-amber-50 min-h-screen flex flex-col relative overflow-x-hidden">
+
+<!-- 🔐 SESSION PROTECTION -->
+<script>
+if (!localStorage.getItem('skillqraft_auth_token')) {
+  window.location.replace('index.html');
+}
+</script>
+
+<!-- Floating Background -->
+<div class="absolute -top-40 -left-40 w-96 h-96 bg-sqPrimary/20 rounded-full blur-3xl animate-float -z-10"></div>
+<div class="absolute top-1/3 right-10 w-80 h-80 bg-orange-300/15 rounded-full blur-3xl animate-float -z-10"></div>
+
+<!-- NAVBAR (identical to Resources & Services) -->
+<nav class="w-full border-b border-stone-800 bg-sqBg/90 backdrop-blur sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="home.html" class="flex items-center gap-2">
+      <div class="h-8 w-8 rounded-lg bg-sqPrimary flex items-center justify-center font-bold text-sqBg text-xl">SQ</div>
+      <span class="font-semibold tracking-tighter text-xl">SkillQraft</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center gap-7 text-sm font-medium">
+      <a href="home.html" class="hover:text-sqPrimary transition">Home</a>
+      <a href="resources.html" class="hover:text-sqPrimary transition">Resources</a>
+      <a href="services.html" class="hover:text-sqPrimary transition">Our Services</a>
+      <a href="digital-news.html" class="hover:text-sqPrimary transition">Digital News</a>
+      <a href="contact.html" class="text-sqPrimary font-semibold">Talk to Us</a>
+    </div>
+
+    <!-- User Area -->
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-xs text-amber-300 tracking-wide">Welcome back</div>
+          <div id="userGreeting" class="font-semibold text-amber-50"></div>
+        </div>
+      </div>
+      <button onclick="logout()" 
+        class="px-6 py-2.5 text-sm font-semibold rounded-2xl border border-red-400/30 hover:bg-red-950/50 hover:border-red-400 text-red-300 transition">
+        Sign out
+      </button>
+      <button onclick="toggleMobileMenu()" class="md:hidden">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="md:hidden hidden border-t border-stone-800 bg-sqBg/95 py-4">
+    <div class="px-6 flex flex-col gap-4 text-sm">
+      <a href="home.html" class="py-2">Home</a>
+      <a href="resources.html" class="py-2">Resources</a>
+      <a href="services.html" class="py-2">Our Services</a>
+      <a href="digital-news.html" class="py-2">Digital News</a>
+      <a href="contact.html" class="py-2 text-sqPrimary font-semibold">Talk to Us</a>
+      <div class="pt-4 border-t border-stone-700">
+        <button onclick="logout()" class="w-full py-3 rounded-2xl border border-red-400/30 text-red-300 font-semibold">Sign out</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO – PERSONAL & WELCOMING -->
+<header class="pt-16 pb-20 text-center px-4 max-w-3xl mx-auto">
+  <div class="inline-flex items-center gap-2 bg-sqCard/80 border border-sqPrimary/30 px-5 py-1.5 rounded-3xl text-xs tracking-widest text-sqPrimary mb-6">
+    <span class="w-2 h-2 bg-sqPrimary rounded-full animate-pulse"></span>
+    WE READ EVERY MESSAGE • REPLY WITHIN HOURS
+  </div>
+  
+  <h1 class="text-4xl md:text-6xl font-semibold leading-none tracking-tighter">
+    Hey <span id="heroName" class="text-sqPrimary"></span>,<br>we're really glad you're here.
+  </h1>
+  
+  <p class="mt-6 text-lg text-amber-200 max-w-md mx-auto">
+    Tell us what you're working on. Whether it's a quick question or a big enrollment, we're ready to help you move forward.
+  </p>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="flex-1 max-w-7xl mx-auto px-4 pb-24">
+  <div class="grid md:grid-cols-[1.1fr,1fr] gap-10">
+    
+    <!-- Contact Form -->
+    <div class="bg-sqCard border border-stone-700 rounded-3xl p-8 md:p-10">
+      <form id="contactForm" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-medium mb-2 text-amber-300">Your first name</label>
+            <input type="text" id="firstName" required 
+              class="w-full px-5 py-4 rounded-2xl bg-sqBg border border-stone-700 focus:border-sqPrimary focus:ring-2 focus:ring-sqPrimary/30 text-base">
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-2 text-amber-300">Email address</label>
+            <input type="email" id="email" required 
+              class="w-full px-5 py-4 rounded-2xl bg-sqBg border border-stone-700 focus:border-sqPrimary focus:ring-2 focus:ring-sqPrimary/30 text-base">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium mb-2 text-amber-300">What are you reaching out about?</label>
+          <select id="interest" class="w-full px-5 py-4 rounded-2xl bg-sqBg border border-stone-700 focus:border-sqPrimary focus:ring-2 focus:ring-sqPrimary/30 text-base">
+            <option value="">Choose one...</option>
+            <option value="Portfolio Glow-Up">Portfolio & Profile Glow-Up</option>
+            <option value="Freelancing Launch">Freelancing Launch Support</option>
+            <option value="Content Rhythm">Content & Personal Brand Rhythm</option>
+            <option value="Resource">I need help with a specific free resource</option>
+            <option value="Other">Something else</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium mb-2 text-amber-300">Tell us more (optional)</label>
+          <textarea id="message" rows="5" placeholder="I'm stuck on my portfolio... or I want to enroll in Freelancing Launch..."
+            class="w-full px-5 py-4 rounded-3xl bg-sqBg border border-stone-700 focus:border-sqPrimary focus:ring-2 focus:ring-sqPrimary/30 text-base resize-y"></textarea>
+        </div>
+
+        <button type="submit" 
+          class="w-full py-5 bg-sqPrimary hover:bg-sqPrimaryDark text-sqBg font-semibold rounded-3xl text-base transition flex items-center justify-center gap-3">
+          Send my message
+          <span class="text-xl">→</span>
+        </button>
+      </form>
+
+      <p id="contactFeedback" class="mt-6 text-center text-emerald-400 text-sm hidden">
+        ✅ Message received! We'll reply within a few hours with next steps.
+      </p>
+    </div>
+
+    <!-- Side Info -->
+    <div class="space-y-8">
+      <div class="bg-sqCard border border-stone-700 rounded-3xl p-8">
+        <p class="text-xs uppercase tracking-widest text-sqPrimary mb-3">Talk directly to MK</p>
+        <div class="flex flex-col gap-3">
+          <a href="https://wa.me/254700000000" target="_blank"
+            class="flex items-center justify-center gap-3 px-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-medium transition">
+            💬 WhatsApp MK (fastest)
+          </a>
+          <a href="mailto:hello@skillqraft.com"
+            class="flex items-center justify-center gap-3 px-6 py-4 border border-stone-700 hover:border-sqPrimary rounded-3xl transition">
+            ✉️ Email us
+          </a>
+        </div>
+      </div>
+
+      <div class="bg-sqCard border border-stone-700 rounded-3xl p-8 text-sm">
+        <p class="font-semibold mb-4 text-amber-50">What happens after you send this?</p>
+        <div class="space-y-6 text-amber-200">
+          <div class="flex gap-4">
+            <div class="text-2xl text-sqPrimary">①</div>
+            <div>We read it personally within hours</div>
+          </div>
+          <div class="flex gap-4">
+            <div class="text-2xl text-sqPrimary">②</div>
+            <div>You get a warm reply with clear next steps</div>
+          </div>
+          <div class="flex gap-4">
+            <div class="text-2xl text-sqPrimary">③</div>
+            <div>If it's a fit, we book a quick call</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs text-amber-300 text-center">
+        You are never bothering us.<br>
+        <span class="text-sqPrimary">The earlier you reach out, the faster we can help you win.</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER (consistent) -->
+<footer class="border-t border-stone-800 bg-sqCard/30 py-16 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 text-center text-xs text-amber-300">
+    <p class="mb-2">© 2026 SkillQraft • Forging your Future</p>
+    <p>We reply fast because we genuinely care about your progress.</p>
+  </div>
+</footer>
+
+<script>
+// ==================== AUTH ====================
+const user = JSON.parse(localStorage.getItem('skillqraft_user') || '{}');
+document.getElementById('userGreeting').textContent = user.firstName || 'Learner';
+document.getElementById('heroName').textContent = user.firstName || 'friend';
+
+// Auto-fill form
+document.getElementById('firstName').value = user.firstName || '';
+document.getElementById('email').value = user.email || '';
+
+// Mobile menu
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+function logout() {
+  if (confirm("Sign out of SkillQraft?")) {
+    localStorage.removeItem('skillqraft_auth_token');
+    localStorage.removeItem('skillqraft_user');
+    window.location.href = 'index.html';
+  }
+}
+
+// Form submit
+const contactForm = document.getElementById('contactForm');
+const contactFeedback = document.getElementById('contactFeedback');
+
+contactForm.addEventListener('submit', e => {
+  e.preventDefault();
+  
+  contactFeedback.classList.remove('hidden');
+  contactForm.reset();
+  
+  // Re-fill name so it feels personal
+  setTimeout(() => {
+    contactFeedback.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 4500);
+});
+</script>
+</body>
+</html>
